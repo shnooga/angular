@@ -1,0 +1,45 @@
+{{diagnostic}}
+<div class="container">
+  <h1>Boom Offsets Calculator</h1>
+  <form (ngSubmit)="onSubmit()" #boomCalcForm="ngForm">
+    <div class="form-group">
+      <label for="minBoomLength">Min Boom Length</label>
+      <input type="text" class="form-control" id="minBoomLength"
+             required
+             [(ngModel)]="model.minBoomLength" name="minBoomLength"
+             #minBoomLength="ngModel">
+    </div>
+    <div [hidden]="minBoomLength.valid || minBoomLength.pristine" class="alert alert-danger"> Boom length is required
+    </div>
+    <div class="form-group">
+      <label for="buildingHeight">Building Height</label>
+      <input type="text" class="form-control" id="buildingHeight"
+             required
+             [(ngModel)]="model.buildingHeight" name="buildingHeight"
+             #buildingHeight="ngModel">
+    </div>
+    <div [hidden]="buildingHeight.valid || buildingHeight.pristine" class="alert alert-danger"> Building height is
+      required
+    </div>
+    <div class="form-group">
+      <label for="buildingOffSet">Building Offset</label>
+      <input type="text" class="form-control" id="buildingOffSet"
+             required
+             [(ngModel)]="model.buildingOffSet" name="buildingOffSet"
+             #buildingOffSet="ngModel">
+    </div>
+    <div [hidden]="buildingOffSet.valid || buildingOffSet.pristine" class="alert alert-danger"> Building offset is
+      required
+    </div>
+    <div class="objectOffset">
+      <label for="buildingOffSet">Object Offset</label>
+      <input type="text" class="form-control" id="objectOffset"
+             required
+             [(ngModel)]="model.objectOffset" name="objectOffset"
+             #objectOffset="ngModel">
+    </div>
+
+    <button type="submit" class="btn btn-success">Calculate</button>
+    <button type="button" class="btn btn-default" (click)="resetInput(); boomCalcForm.reset();">Clear inputs</button>
+  </form>
+</div>
