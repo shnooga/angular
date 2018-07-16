@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+<ul>
+<li>
+Enter your name: <input type="text" id="fname" onblur="myFunction()">
+</li><li>
+Boom Length <input type="text" id="boomlength" value="20">
+</li><li>
+Bld Offset: <input type="text" id="bldoffset" value="3">
+</li><li>
+Bld Height: <input type="text" id="bldheight"  value="4" onblur="calcunitoffset()">
+</li><li>
+Unit Offset: <input type="text" id="unitoffset" >
+</li>
+</ul>
+<p>When you leave the input field, a function is triggered which transforms the input text to upper case.</p>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("fname");
+    x.value = x.value.toUpperCase();
+    
+        var boomlength = document.getElementById("boomlength");
+        alert(boomlength.value);
+}
+
+function calcunitoffset() {
+    var boomlength = document.getElementById("boomlength").value;
+    var bldoffset = document.getElementById("bldoffset").value;
+    var bldheight = document.getElementById("bldheight").value;
+    var unitoffset = document.getElementById("unitoffset");
+   
+    var hypo1 = Math.sqrt(Math.pow(bldoffset, 2) + Math.pow(bldheight, 2));
+    unitoffset.value = bldoffset * (boomlength - hypo1)/hypo1;
+}
+
+function calcboomlength() {
+    var boomlength = document.getElementById("boomlength");
+    var bldoffset = document.getElementById("bldoffset").value;
+    var bldheight = document.getElementById("bldheight").value;
+    var unitoffset = document.getElementById("unitoffset");
+   
+    var hypo1 = Math.sqrt(Math.pow(bldoffset, 2) + Math.pow(bldheight, 2));
+    boomlength.value = hypo1 + Math.sqrt(Math.pow(unitoffset, 2) + Math.pow( (bldheight*unitoffset/bldoffset), 2));
+}
+
+</script>
+
+</body>
+</html>
