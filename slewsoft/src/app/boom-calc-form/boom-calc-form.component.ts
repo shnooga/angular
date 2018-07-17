@@ -17,7 +17,13 @@ export class BoomCalcFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    alert('boom');
+    const boomLength = this.model.minBoomLength;
+    const bldOffset = this.model.buildingOffSet;
+    const bldHeight = this.model.buildingHeight;
+    const hypo1 = Math.sqrt(Math.pow(bldOffset, 2) + Math.pow(bldHeight, 2));
+    // alert(hypo1);
+
+    this.model.objectOffset = bldOffset * (boomLength - hypo1) / hypo1;
   }
   resetInput() {
     this.model = new BoomCalc(null,null,null,null);
