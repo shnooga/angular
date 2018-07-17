@@ -1,9 +1,10 @@
 export class BoomCalc {
+  public boomAngle: number;
 
   constructor(
-    public buildingOffSet: number,
+    public minBoomLength: number,
+    public buildingOffset: number,
     public buildingHeight: number,
-    public objectOffset: number,
-    public minBoomLength: number
+    public objectOffset?: number
   ) { }
 }
