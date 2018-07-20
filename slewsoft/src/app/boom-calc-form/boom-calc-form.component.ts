@@ -8,7 +8,7 @@ import {BoomCalc} from '../boom-calc';
 })
 export class BoomCalcFormComponent implements OnInit {
   private submitted = false;
-  protected model = new BoomCalc(3,4, 5);
+  model = new BoomCalc(3,4, 5);
 
   constructor() { }
 

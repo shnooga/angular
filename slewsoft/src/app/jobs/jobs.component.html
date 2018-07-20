@@ -1,0 +1,21 @@
+<h2>Active Jobs</h2>
+
+<div>
+  <label>Job name:
+    <input #jobId />
+  </label>
+  <!-- (click) passes input value to add() and then clears the input -->
+  <button (click)="add(jobId.value); jobId.value=''">
+    add
+  </button>
+</div>
+
+<ul class="jobs">
+  <li *ngFor="let job of jobs">
+    <a routerLink="/detail/{{job.id}}">
+      <span class="badge">{{job.id}}</span> {{job.name}}
+    </a>
+    <button class="delete" title="delete job"
+            (click)="delete(job)">x</button>
+  </li>
+</ul>
