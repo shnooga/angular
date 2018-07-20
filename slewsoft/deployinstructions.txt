@@ -1,0 +1,7 @@
+ng build --prod
+firebase init
+  choose host
+  public dir -> dist/slewsoft
+  SPA -> yes
+  overwrite index.html -> no
+firebase deploy
