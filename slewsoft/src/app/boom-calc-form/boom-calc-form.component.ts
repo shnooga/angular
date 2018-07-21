@@ -8,7 +8,7 @@ import {BoomCalc} from '../boom-calc';
 })
 export class BoomCalcFormComponent implements OnInit {
   private submitted = false;
-  model = new BoomCalc(3,4, 5);
+  model = new BoomCalc(3, 4, 5);
 
   constructor() { }
 
@@ -22,15 +22,19 @@ export class BoomCalcFormComponent implements OnInit {
     const bldHeight = this.model.buildingHeight;
     const hypo1 = Math.sqrt(Math.pow(bldOffset, 2) + Math.pow(bldHeight, 2));
     // alert(hypo1);
-    this.model.boomAngle = this.toDegree(Math.atan(bldHeight / bldOffset));
-    this.model.objectOffset = bldOffset * (boomLength - hypo1) / hypo1;
+    this.model.boomAngleStr = this.toTwoDecimal(this.toDegree(Math.atan(bldHeight / bldOffset)));
+    this.model.objectOffsetStr = this.toTwoDecimal(bldOffset * (boomLength - hypo1) / hypo1);
   }
   resetInput() {
-    this.model = new BoomCalc(null,null,null,null);
+    this.model = new BoomCalc(null, null, null);
   }
 
   toDegree(radians: number) {
     return radians * (180 / Math.PI);
+  }
+
+  toTwoDecimal(num: number) {
+    return num.toFixed(2);
   }
   // TODO: Remove this when we're done
   get diagnostic() { return JSON.stringify(this.model); }
