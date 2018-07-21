@@ -1,1 +1,12 @@
 @import url('https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css');
+
+button {
+  margin: 10px;
+  width: 100px;
+  border-radius: 15px;
+  border: 5px solid black;
+  padding: 10px 20px;
+  /*color: aliceblue;
+  /* background-color: #d6a844; */
+  text-align: center;
+}

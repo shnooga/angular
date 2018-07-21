@@ -4,16 +4,16 @@ section.one {
   width: 300px;
 }
 
-button {
-  margin: 10px;
-  width: 100px;
-  border-radius: 15px;
-  border: 5px solid black;
-  padding: 10px 20px;
-  /*color: aliceblue;
-  /* background-color: #d6a844; */
-  text-align: center;
-}
+/*button {*/
+  /*margin: 10px;*/
+  /*width: 100px;*/
+  /*border-radius: 15px;*/
+  /*border: 5px solid black;*/
+  /*padding: 10px 20px;*/
+  /*!*color: aliceblue;*/
+  /*!* background-color: #d6a844; *!*/
+  /*text-align: center;*/
+/*}*/
 
 .container {
   width: 300px;
