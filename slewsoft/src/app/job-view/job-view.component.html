@@ -1,9 +1,20 @@
-<div *ngIf="job">
+<div *ngIf="job" class="container" >
   <h2>{{job.name | uppercase}} Job</h2>
-  <div><span>id: </span>{{job.id}}</div>
+  <!--<div><span>id: </span>{{job.id}}</div>-->
   <div>
-    <label>name:
+    <label>Name:
       <input [(ngModel)]="job.name" placeholder="name"/>
+    </label>
+  </div>
+  <div>
+    <label>Site Location:
+      <img src="assets/site1.PNG" alt="google map" width="300px">
+    </label>
+  </div>
+  <div>
+    <label>Notes:
+      <!--<input [(ngModel)]="job.notes" placeholder="name"/>-->
+      <textarea [(ngModel)]="job.notes" name="notes" rows="5" cols="40"></textarea>
     </label>
   </div>
   <button (click)="goBack()">go back</button>
