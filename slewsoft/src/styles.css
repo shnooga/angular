@@ -16,3 +16,24 @@ button {
   float: left;
   /*alignment: left;*/
 }
+
+.labelleft {
+  width: 120px;
+  alignment: left;
+}
+
+.labelright {
+  width: 120px;
+  float: right;
+}
+
+.inputleft {
+  width: 70px;
+  float: left;
+}
+
+.inputright {
+  width: 75px;
+  float: right;
+}
+
