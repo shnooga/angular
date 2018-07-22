@@ -8,7 +8,7 @@
     </div>
     <div class="form-group">
       <label >Min Boom Length</label><br>
-      <input type="text" size="10" class="form-control inputleft" id="minBoomLength"
+      <input type="number" size="10" class="form-control inputleft" id="minBoomLength"
              required
              [(ngModel)]="model.minBoomLength" name="minBoomLength"
              #minBoomLength="ngModel">
@@ -20,27 +20,28 @@
       <label for="buildingOffSet" class="labelright">Building Offset</label>
     </div>
     <div class="form-group">
-      <input type="text" class="form-control inputleft" id="buildingHeight"
+      <input type="number" class="form-control inputleft" id="buildingHeight"
              required
              [(ngModel)]="model.buildingHeight" name="buildingHeight"
              #buildingHeight="ngModel">
-      <input type="text" class="form-control inputright" id="buildingOffSet"
+      <input type="number" class="form-control inputright" id="buildingOffSet"
              required
              [(ngModel)]="model.buildingOffset" name="buildingOffSet"
              #buildingOffSet="ngModel">
     </div>
+    <br>
     <div [hidden]="buildingHeight.valid || buildingHeight.pristine" class="alert alert-danger inputleft">  Height required </div>
     <div [hidden]="buildingOffSet.valid || buildingOffSet.pristine" class="alert alert-danger inputright">  Offset required </div>
-    <div class="objectOffset labelleft">
-      <label >Object Offset</label>
-      <input type="text" class="form-control" id="objectOffset"
+    <div>
+      <label class="labelleft">Object Offset</label>
+      <label class="labelright">Boom angle (deg)</label>
+    </div>
+    <div class="form-group">
+      <input type="number" class="form-control inputleft" id="objectOffset"
              readonly
              [(ngModel)]="model.objectOffsetStr" name="objectOffset"
              #objectOffset="ngModel">
-    </div>
-    <div class="boomAngle" class="labelleft">
-      <label>Boom angle (deg)</label>
-      <input type="text" class="form-control" id="boomAngle"
+      <input type="number" class="form-control inputright" id="boomAngle"
              readonly
              [(ngModel)]="model.boomAngleStr" name="boomAngle"
              #objectOffset="ngModel">
@@ -54,10 +55,10 @@
       <label class="labelright">Jib offset (deg)</label>
     </div>
     <div class="form-group">
-      <input type="text" class="form-control inputleft" id="jibLength"
+      <input type="number" class="form-control inputleft" id="jibLength"
              [(ngModel)]="model.jibLength" name="jibLength"
              #jibLength="ngModel">
-      <input type="text" class="form-control inputright" id="jibAngle"
+      <input type="number" class="form-control inputright" id="jibAngle"
              [(ngModel)]="model.jibAngle" name="jibAngle"
              #jibAngle="ngModel">
     </div>
@@ -70,15 +71,28 @@
       <label class="labelright">Insert Length (deg)</label>
     </div>
     <div class="form-group">
-      <input type="text" class="form-control inputleft" id="insertQty"
+      <input type="number" class="form-control inputleft" id="insertQty"
              [(ngModel)]="model.insertQty" name="insertQty"
              #insertQty="ngModel">
-      <input type="text" class="form-control inputright" id="insertLength"
+      <input type="number" class="form-control inputright" id="insertLength"
              [(ngModel)]="model.insertLength" name="insertLength"
              #insertLength="ngModel">
     </div>
-
-
+    <br>
+    <div>
+      <label class="labelleft">Overall Radius</label>
+      <label class="labelright">Overall Boom Length</label>
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control inputleft" id="overallRadius"
+             readonly
+             [(ngModel)]="model.overallRadiusStr" name="overallRadius"
+             #objectOffset="ngModel">
+      <input type="text" class="form-control inputright" id="overallOffset"
+             readonly
+             [(ngModel)]="model.overallBoomLengthStr" name="overallOffset"
+             #objectOffset="ngModel">
+    </div>
 
     <br>
     <section class="one">
