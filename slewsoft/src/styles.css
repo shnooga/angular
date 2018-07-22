@@ -11,10 +11,20 @@ button {
   text-align: center;
 }
 
+section.one {
+  /* border: 2px solid green; */
+  border-radius: 15px;
+  width: 300px;
+}
+
 .container {
   width: 300px;
   float: left;
   /*alignment: left;*/
+}
+
+.divleft {
+  alignment: left;
 }
 
 .labelleft {
@@ -23,8 +33,9 @@ button {
 }
 
 .labelright {
-  width: 120px;
+  width: 150px;
   float: right;
+  text-align: right;
 }
 
 .inputleft {
