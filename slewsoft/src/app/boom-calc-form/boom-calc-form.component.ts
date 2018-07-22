@@ -21,14 +21,14 @@ export class BoomCalcFormComponent implements OnInit {
     this.model.jibLength = 0;
     this.model.insertQty = 0;
     this.model.insertLength = 0;
+    this.model.craneBaseHeight = 0;
   }
 
   onSubmit() {
     this.submitted = true;
-    // this.model.minBoomLength = parseFloat(this.model.minBoomLength);
     const boomLength = this.model.minBoomLength;
     const bldOffset = this.model.buildingOffset;
-    const bldHeight = this.model.buildingHeight;
+    const bldHeight = this.model.buildingHeight - this.model.craneBaseHeight;
     const hypo1 = Math.sqrt(Math.pow(bldOffset, 2) + Math.pow(bldHeight, 2));
     // alert(hypo1);
     this.model.boomAngleStr = toTwoDecimal(toDegree(Math.atan(bldHeight / bldOffset)));
@@ -36,20 +36,16 @@ export class BoomCalcFormComponent implements OnInit {
     this.model.objectOffsetStr = toTwoDecimal(bldOffset * (boomLength - hypo1) / hypo1);
     this.model.overallRadiusStr = toTwoDecimal( bldOffset + Math.cos(toRadian(this.extractJibAngle())) * this.model.jibLength);
     this.model.overallBoomLengthStr = toTwoDecimal(this.model.minBoomLength + (this.model.insertQty * this.model.insertLength));
-    // alert(this.model.overallBoomLengthStr);
   }
   resetInput() {
     this.model = new BoomCalc(null, null, null);
   }
 
   extractBoomAngle() {
-    return toDegree(Math.atan(this.model.buildingOffset / this.model.buildingHeight));
+    return toDegree(Math.atan(this.model.buildingOffset / (this.model.buildingHeight - this.model.craneBaseHeight)));
   }
 
   extractJibAngle() {
-    const i = this.extractBoomAngle();
-    const j = this.extractBoomAngle() - this.model.jibAngle;
-    const k = Math.cos(toRadian(Math.abs(j)));
     return Math.abs(this.extractBoomAngle() - this.model.jibAngle);
   }
 

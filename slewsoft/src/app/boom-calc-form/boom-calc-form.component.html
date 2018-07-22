@@ -1,4 +1,4 @@
-<!--{{diagnostic}}-->
+{{diagnostic}}
 
 
 <div class="container">
@@ -7,11 +7,17 @@
     <div class="form-group">
     </div>
     <div class="form-group">
-      <label >Min Boom Length</label><br>
+      <label class="labelleft">Min Boom Length</label>
+      <label class="labelright">Crane base height</label>
+      <!--<label >Min Boom Length</label><br>-->
       <input type="number" size="10" class="form-control inputleft" id="minBoomLength"
              required
              [(ngModel)]="model.minBoomLength" name="minBoomLength"
              #minBoomLength="ngModel">
+      <input type="number" size="10" class="form-control inputright" id="craneBaseHeight"
+             required
+             [(ngModel)]="model.craneBaseHeight" name="craneBaseHeight"
+             #craneBaseHeight="ngModel">
     </div><br>
     <div [hidden]="minBoomLength.valid || minBoomLength.pristine" class="alert alert-danger"> Boom length is required
     </div>

@@ -7,6 +7,7 @@ export class BoomCalc {
   public jibLength: number;
   public insertQty: number;
   public insertLength: number;
+  public craneBaseHeight: number;
 
   constructor(
     public minBoomLength: number,
