@@ -1,7 +1,7 @@
 import { Component} from "@angular/core";
 
 @Component(({
-  selector: 'app-number',
+  selector: 'number-child',
   template: '<b>{{message}}</b>'
 }))
 

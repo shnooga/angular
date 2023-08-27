@@ -1,0 +1,21 @@
+<form [formGroup]="myForm" (ngSubmit)="Submit(myForm)" [noValidate]="">
+<div>
+    <label>
+        User:
+        <input formControlName="user">
+    </label>
+</div>
+<div>
+    <label>
+        Email:
+        <input formControlName="email">
+    </label>
+</div>
+<div>
+    <label>
+        Message:
+        <input formControlName="message">
+    </label>
+</div>
+<button type="submit">Send</button>
+</form>
