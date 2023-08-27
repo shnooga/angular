@@ -1,0 +1,9 @@
+<form>
+    Quantity &nbsp;
+    <input type="number" id="myInput" name="quantity" min="1" max="10" [formControl]="inputCtl"> &nbsp; (min is 1 and max is 10)
+    <br /> <br />
+    <input type="range" name="range" min="0" max="100" step="10" value="60" [formControl]="rangeCtl">
+    <br /> <br />
+    Range &nbsp;
+    <input type="submit" (click)="Submit()">
+</form>
