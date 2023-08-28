@@ -1,23 +1,16 @@
 <h1>Select your tech skill</h1>
 
-<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+<form [formGroup]="myForm" (ngSubmit)="submit()" novalidate>
 
-    <div class="form-group">
-        <label for="tehnology">Technology</label>
-        <div *ngFor="let tech of techStackList">
-            <label>
-<!--                <input type="checkbox" [value]="tech.code" (change)="controlOnChange($event)" />-->
-                <input type="checkbox" [value]="tech.code" />
-                {{tech.name}}
-            </label>
-        </div>
+    <label for="technology">Technology</label>
+    <div *ngFor="let tech of techStackList">
+        <label>
+            <input type="checkbox" [value]="tech.code" (change)="controlOnChange($event)"/>
+            {{tech.name}}
+        </label>
     </div>
 
-    <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+    <button class="btn btn-primary" type="submit" [disabled]="!myForm.valid">Submit</button>
 </form>
-<div class="col-md-4">
-    <h4>No of Selected Technologies : {{selectedCheckBoxList.length}} </h4>
-    <ul>
-        <li *ngFor="let tech of selectedCheckBoxList">{{tech}}</li>
-    </ul>
-</div>
+<h4>No of Selected Technologies : {{selectedCheckboxes.length}} </h4>
+<li *ngFor="let tech of selectedCheckboxes">{{tech}}</li>

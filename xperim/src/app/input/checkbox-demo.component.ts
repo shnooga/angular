@@ -1,39 +1,16 @@
-// import {FormControl, FormGroup} from "@angular/forms";
-// import {Component} from "@angular/core";
-//
-// @Component({
-//     selector: 'checkbox-demo',
-//     templateUrl: '/checkbox-demo.component.html'
-// })
-//
-// export class CheckboxDemoComponent {
-//     myForm =  new FormGroup ( {
-//     email: new FormControl(),
-//     user: new FormControl(),
-//     message: new FormControl(),
-//     animalChoices: new FormControl(),
-//     });
-//
-//     // Use the class property, myForm instead of the passed FormGroup param, fg
-//     Submit (fg: FormGroup) {
-//         console.log('Valid?', this.myForm.valid); // true or false
-//         console.log('Name', this.myForm.value.user);
-//         console.log('Email', this.myForm.value.email);
-//         console.log('Message', this.myForm.value.message);
-//     }
-// }
-
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 
 @Component({
     selector: 'checkbox-demo',
     templateUrl: './checkbox-demo.component.html',
 })
-export class CheckboxDemoComponent {
 
-    form: FormGroup;
-    selectedCheckBoxList = [];
+export class CheckboxDemoComponent {
+    myForm: FormGroup;
+    currentValue: any;
+    selectedCheckboxes: string[] =[];
+
     techStackList: any = [
         { id: 1, name: 'Angular', code : 'ANG' },
         { id: 2, name: 'Node JS', code : 'NOD' },
@@ -43,28 +20,26 @@ export class CheckboxDemoComponent {
     ];
 
     constructor(private formBuilder: FormBuilder) {
-        this.form = this.formBuilder.group({
+        this.myForm = this.formBuilder.group({
             technology: this.formBuilder.array([], [Validators.required])
         })
     }
 
-
-    // controlOnChange(e) {
-    controlOnChange() {
-        const technologies: FormArray = this.form.get('technology') as FormArray;
-
-        // if (e.target.checked) {
-        //     technologies.push(new FormControl(e.target.value));
-        //     this.selectedCheckBoxList.push(e.target.value);
-        // } else {
-        //     const index = technologies.controls.findIndex(technology => technology.value === e.target.value);
-        //     technologies.removeAt(index);
-        // }
+    controlOnChange(e : Event) {
+        const technologies: FormArray = this.myForm.get('technology') as FormArray;
+        var targetElement = e.target as HTMLInputElement;
+        if (targetElement.checked) {
+            technologies.push(new FormControl(targetElement.value));
+            this.selectedCheckboxes.push(targetElement.value);
+        } else {
+            let index = technologies.controls.findIndex(technology => technology.value === targetElement.value);
+            technologies.removeAt(index);
+            this.selectedCheckboxes= this.selectedCheckboxes.filter((e, i) => e !== targetElement.value);
+        }
     }
 
     submit(){
-        console.log(this.form.value);
+        console.log(this.myForm.value);
     }
-
 }
 
