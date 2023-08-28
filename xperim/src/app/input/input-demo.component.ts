@@ -1,7 +1,5 @@
 import { Component, ViewChild} from "@angular/core";
-import {FormGroup, FormControl, Validators} from '@angular/forms';
-
-// import { NumberChildComponent} from "./number-child/number-child.component";
+import {FormControl} from '@angular/forms';
 
 @Component({
     selector: 'input-demo',

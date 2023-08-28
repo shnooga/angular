@@ -26,8 +26,10 @@ export class CheckboxDemoComponent {
     }
 
     controlOnChange(e : Event) {
-        const technologies: FormArray = this.myForm.get('technology') as FormArray;
+        // Must cast as HtlmInputElement otherwise property checked will not be accessible
         var targetElement = e.target as HTMLInputElement;
+        const technologies: FormArray = this.myForm.get('technology') as FormArray;
+
         if (targetElement.checked) {
             technologies.push(new FormControl(targetElement.value));
             this.selectedCheckboxes.push(targetElement.value);

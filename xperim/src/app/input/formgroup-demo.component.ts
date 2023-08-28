@@ -22,4 +22,3 @@ export class FormgroupDemoComponent {
         console.log('Message', this.myForm.value.message);
     }
 }
-
