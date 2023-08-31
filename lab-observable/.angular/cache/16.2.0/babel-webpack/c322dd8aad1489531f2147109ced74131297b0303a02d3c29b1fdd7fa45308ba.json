@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class AuthenticationService {}","map":{"version":3,"names":["AuthenticationService"],"sources":["/Users/huey.nguyen/code/angular/lab-observable/src/app/services/authentication.service.ts"],"sourcesContent":["export class AuthenticationService {\n\n}\n"],"mappings":"AAAA,OAAM,MAAOA,qBAAqB"},"metadata":{},"sourceType":"module","externalDependencies":[]}
