@@ -1,3 +1,4 @@
 export class AuthenticationResponse {
-    token:string = "";
+    token: string = "";
+    error: string = "";
 }

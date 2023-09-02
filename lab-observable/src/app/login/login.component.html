@@ -3,7 +3,7 @@
         <h5 class="card-header"> login </h5>
         <form class="card-body" [formGroup]="loginForm">
             <div class="form-group">
-                <div class="alert alert-danger" *ngIf="IsAuthenticatiionFailed"> Invalid Username or Password</div>
+                <div class="alert alert-danger" *ngIf="!failsLogin()"> Invalid Username or Password</div>
                 <label for="UserName"> User Name: </label>
                 <input class="form-control" autofocus [ngClass]="{'is-valid':loginForm.controls.UserName.valid, 'is-invalid':loginForm.controls.UserName.invalid}" formControlName="UserName" type="text" name="UserName">
                 <div class="alert alert-danger" [hidden]="!(loginForm.controls.UserName.dirty && loginForm.controls.UserName.errors?.['required'])"> Enter user name</div>
@@ -12,8 +12,9 @@
             <div class="form-group">
                 <label for="Password"> Password: </label>
                 <input class="form-control" [ngClass]="{'is-valid':loginForm.controls.Password.valid, 'is-invalid':loginForm.controls.Password.invalid}" formControlName="Password" type="password" name="Password">
-                <div class="alert alert-danger" [hidden]="FailsRequired('Password')"> Enter pass word wanker!!</div>
-                <div class="alert alert-danger" [hidden]="FailsMinChar('Password')"> Min 6 chars wanker!!</div>
+                <div class="alert alert-danger" [hidden]="failsRequired('Password')"> Enter pass word wanker!!</div>
+                <div class="alert alert-danger" [hidden]="failsMinChar('Password')"> Min 6 chars wanker!!</div>
+                <div class="alert alert-danger" [hidden]="failsLogin()"> Failed login</div>
             </div>
             <input type="submit" class="btn btn-success" value="Login" (click)="login()" [disabled]="loginForm.invalid">
         </form>

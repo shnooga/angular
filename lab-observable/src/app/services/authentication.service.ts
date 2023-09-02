@@ -16,20 +16,25 @@ export class AuthenticationService {
             // .subscribe( r => this.handleNext(r)); // Short hand for next only.
             .subscribe({
                 next: (r: AuthenticationResponse) => this.handleNext(r),
-                error: (e: Error) => this.handleError(e),
+                error: (e: Error) => this.handleError(e.message),
                 complete: () => console.log("Stream completed")
             });
     }
 
-    handleNext(response: AuthenticationResponse) {
+    private handleNext(response: AuthenticationResponse) {
         if (response.token !== undefined) {
             localStorage['token'] = response.token;
+            localStorage['error'] = undefined;
             this.router.navigate(['customer']);
+        }
+        if (response.error !== undefined) {
+            console.log(response.error);
+            this.handleError(response.error);
         }
     }
 
-    handleError(error: Error) {
-        alert(error.message);
+    private handleError(error: String) {
+        localStorage['error'] = error;
         console.log(error);
     }
 
