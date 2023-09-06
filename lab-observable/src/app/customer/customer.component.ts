@@ -1,52 +1,51 @@
-import { Component, ViewChild } from '@angular/core';
-import { Customer } from "../model/customer"
+import {Component, ViewChild} from '@angular/core';
+import {Customer} from "../model/customer"
+import {CustomerService} from "../services/customer.service";
+import {NgForm} from "@angular/forms";
+import {AuthenticationService} from "../services/authentication.service";
+import {Observable} from "rxjs";
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'customer',
-  templateUrl: './customer.component.html'
+  templateUrl: './customer.component.html',
+  providers: [CustomerService]
 })
 
 export class CustomerComponent {
-  Customers:Array<Customer>;
-  IsAddNew:boolean;
-  FName: string = "";
-  LName: string = "";
-  // @ViewChild('myForm') CustomerForm: NgForm;
-  LoginUser:string="DummyNane"
+  IsAddNew$: Observable<boolean>;
+  Customers$: Observable<Array<Customer>>;
+  FirstName: string = "";
+  LastName: string = "";
+  @ViewChild('myForm') CustomerForm: NgForm;
+  LoginUserFirstName:string="DummyNane"
 
-  constructor() {
-    this.IsAddNew = false;
-    this.Customers = new Array<Customer>;
-    this.Customers.push(new Customer("Sukesh","Marla"));
-    this.Customers.push(new Customer("Just","Compile"));
-    this.Customers.push(new Customer("Charlie", "Brown"));
+  constructor(private custService : CustomerService, private authService : AuthenticationService) {
+    const decodedToken:any = jwt_decode(localStorage?.['token']);
+    this.LoginUserFirstName = decodedToken.firstName;
+    this.IsAddNew$ = this.custService.IsAddNew$;
+    this.Customers$ = this.custService.Customers$;
   }
 
   Save(){
-    this.Customers.push(new Customer(this.FName, this.LName));
-    this.ToggleAdd(false);
+    this.custService.Save(new Customer(this.FirstName, this.LastName));
     this.reset();
   }
 
   Cancel(){
-    this.ToggleAdd(false);
+    this.custService.setList();
     this.reset();
   }
 
   AddNew() {
-    this.ToggleAdd(true);
+    this.custService.setAddNew();
   }
 
   reset() {
-    this.FName="";
-    this.LName="";
-  }
-
-  ToggleAdd(hide: boolean) {
-    this.IsAddNew = hide;
+    this.CustomerForm.reset();
   }
 
   logout() {
-    localStorage.clear();
+    this.authService.logout();
   }
 }
