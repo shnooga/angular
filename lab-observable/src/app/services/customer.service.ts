@@ -32,8 +32,7 @@ export class CustomerService {
 
     Save(customer: Customer) {
         this.Customers.push(customer);
-        // Notify subscribers
-        this.Customers$ = of(this.Customers);
+        // Notify subscriber; don't need to notify customer list since it's arrays are passed by reference
         this.IsAddNewSubject.next(false);
     }
 }
