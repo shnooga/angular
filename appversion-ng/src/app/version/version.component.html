@@ -2,9 +2,29 @@
 
 <div>
 
-  <div class="card-title">
-    <i class="fas fa-user-plus"></i>
-    <input type="button" value="Refresh" class="btn btn-primary fas fa-coffee fa-xs" (click)="onLoad()">
-  </div>
+<!--  <div class="card-title">-->
+<!--    <i class="fas fa-user-plus"></i>-->
+<!--    <input type="button" value="Refresh" class="btn btn-primary fas fa-coffee fa-xs" (click)="onLoad()">-->
+<!--  </div>-->
+
+  <form [formGroup]="myForm" (ngSubmit)="onLoad()">
+
+    <p>
+
+      <select formControlName="appGroupCtl">
+        <option >All</option>
+        <option *ngFor="let appGroup of appGroups" [ngValue]="appGroup">{{appGroup}}</option>
+      </select>
+      <br>
+      <select formControlName="appCtl">
+        <option >All</option>
+        <option *ngFor="let app of apps" [ngValue]="app">{{app}}</option>
+      </select>
+
+
+      <button type="submit">Refresh</button>
+    </p>
+
+  </form>
 
 </div>

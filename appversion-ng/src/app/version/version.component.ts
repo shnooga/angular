@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, NgForm} from "@angular/forms";
+import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {Observable} from "rxjs";
 import jwt_decode from 'jwt-decode';
 import {Env} from "../model/Env";
@@ -13,35 +13,57 @@ import {AppInfo} from "../model/AppInfo";
 
 export class VersionComponent {
   private envs: Env[];
-  appGroups: String[];
+  apps!: String[];
+  appGroups!: String[];
   appGroupToEnvsMap = new Map<String, Array<Env>>;
   displayEnvs = new Array<Env>();
 
-  constructor() {
+  // contactForm! means will be set latery2yy2y
+  myForm!: FormGroup;
+
+  constructor(private fb: FormBuilder) {
     this.envs = JSON.parse(ENV_INFOS) as Env[];
-    this.appGroups = this.createAppGroups();
+    this.populateSelectOptions();
     this.populateAppGroupToEnvsMap();
+    // this.setDefaultSelections();
+
+    this.myForm = this.fb.group({
+      appGroupCtl: [null],
+      appCtl: [null]
+    });
+
+    this.myForm.get("appGroup")?.valueChanges
+      .subscribe(f => {
+        this.onAppGroupChanged(f);
+      })
   }
 
-  private createAppGroups(): String[] {
-    const appSet = new Set<String>();
+  private populateSelectOptions() {
+    const appNameSet = new Set<String>();
+    const appGroupNameSet = new Set<String>();
     for (const e of this.envs) {
       // TODO: refactor this; not efficient
       e.appInfos.forEach(a => {
-        appSet.add(a.group);
+        appNameSet.add(a.name);
+        appGroupNameSet.add(a.group);
       });
       // for (const a of e.appInfos.values()) {
-      //   if (appSet.has(a.group)) {
+      //   if (appGroupNameSet.has(a.group)) {
       //     continue;
       //   }
-      //   appSet.add(a.group);
+      //   appGroupNameSet.add(a.group);
       // }
     }
 
-    for (const s of Array.from(appSet.values())) {
+    for (const s of Array.from(appNameSet.values())) {
       console.log(s);
     }
-    return Array.from(appSet.values());
+
+    for (const s of Array.from(appGroupNameSet.values())) {
+      console.log(s);
+    }
+    this.apps = Array.from(appNameSet.values());
+    this.appGroups = Array.from(appGroupNameSet.values());
   }
 
   private populateAppGroupToEnvsMap() {
@@ -68,6 +90,12 @@ export class VersionComponent {
     console.log("done");
   }
 
+  private setDefaultSelections() {
+    this.myForm.get("appGroupCtl")?.patchValue("All");
+    this.myForm.get("appCtl")?.patchValue("All");
+  }
+
+
   // private createDisplayEnvs(appGroup: String): Array<Env>{
   //   const appSet = new Set<String>();
   //   for (const e of envs) {
@@ -85,6 +113,10 @@ export class VersionComponent {
   // }
 
   onLoad() {
-    alert("onLoad");
+    alert(this.myForm.value.appGroupCtl);
+  }
+
+  onAppGroupChanged(value: String) {
+    console.log('onAppGroupChanged ' + value)
   }
 }
