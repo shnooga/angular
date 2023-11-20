@@ -11,17 +11,19 @@
 
     <p>
 
+      <label for="appGroupCtl"> App Groups </label>
       <select formControlName="appGroupCtl">
-        <option >All</option>
+<!--        <option >All</option>-->
         <option *ngFor="let appGroup of appGroups" [ngValue]="appGroup">{{appGroup}}</option>
       </select>
       <br>
+      <label for="appCtl"> Apps </label>
       <select formControlName="appCtl">
-        <option >All</option>
+<!--        <option >All</option>-->
         <option *ngFor="let app of apps" [ngValue]="app">{{app}}</option>
       </select>
 
-
+      <br>
       <button type="submit">Refresh</button>
     </p>
 

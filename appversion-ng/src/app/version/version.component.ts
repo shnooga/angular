@@ -12,58 +12,61 @@ import {AppInfo} from "../model/AppInfo";
 })
 
 export class VersionComponent {
-  private envs: Env[];
+  private readonly envs: Array<Env>;
   apps!: String[];
   appGroups!: String[];
   appGroupToEnvsMap = new Map<String, Array<Env>>;
   displayEnvs = new Array<Env>();
 
-  // contactForm! means will be set latery2yy2y
-  myForm!: FormGroup;
+  // contactForm! means will be set later
+  readonly myForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.envs = JSON.parse(ENV_INFOS) as Env[];
-    this.populateSelectOptions();
+    this.envs = JSON.parse(ENV_INFOS) as Array<Env>;
+    this.poplulateAppCtl(this.envs);
+    this.populateAppGroupCtl();
     this.populateAppGroupToEnvsMap();
-    // this.setDefaultSelections();
 
     this.myForm = this.fb.group({
       appGroupCtl: [null],
       appCtl: [null]
     });
 
-    this.myForm.get("appGroup")?.valueChanges
+    this.myForm.get("appGroupCtl")?.valueChanges
       .subscribe(f => {
         this.onAppGroupChanged(f);
       })
+
+    this.setDefaultSelections();
   }
 
-  private populateSelectOptions() {
-    const appNameSet = new Set<String>();
+  private populateAppGroupCtl() {
     const appGroupNameSet = new Set<String>();
     for (const e of this.envs) {
       // TODO: refactor this; not efficient
       e.appInfos.forEach(a => {
-        appNameSet.add(a.name);
         appGroupNameSet.add(a.group);
+        console.log(a.group);
       });
-      // for (const a of e.appInfos.values()) {
-      //   if (appGroupNameSet.has(a.group)) {
-      //     continue;
-      //   }
-      //   appGroupNameSet.add(a.group);
-      // }
+      this.appGroups = Array.from(appGroupNameSet.values());
+      this.appGroups.splice(0, 0, "All");
     }
+  }
 
-    for (const s of Array.from(appNameSet.values())) {
-      console.log(s);
+  private poplulateAppCtl(myEnvs: Env[] | undefined) {
+    if(typeof myEnvs === "undefined") {
+      return;
     }
-
-    for (const s of Array.from(appGroupNameSet.values())) {
-      console.log(s);
+    const appNameSet = new Set<String>();
+    for (const e of myEnvs) {
+      // TODO: refactor this; not efficient
+      e.appInfos.forEach(a => {
+        appNameSet.add(a.name);
+        console.log(a.name);
+      });
     }
     this.apps = Array.from(appNameSet.values());
-    this.appGroups = Array.from(appGroupNameSet.values());
+    this.apps.splice(0, 0, "All");
   }
 
   private populateAppGroupToEnvsMap() {
@@ -83,8 +86,6 @@ export class VersionComponent {
           }
         }
         this.appGroupToEnvsMap.get(appGroup)?.push(nuEnv);
-        // this.appGroupToEnvsMap.get(appGroup).add(nuEnv);
-        // this.appGroupToEnvsMap.set(appGroup, nuEnv);
       }
     }
     console.log("done");
@@ -95,28 +96,18 @@ export class VersionComponent {
     this.myForm.get("appCtl")?.patchValue("All");
   }
 
-
-  // private createDisplayEnvs(appGroup: String): Array<Env>{
-  //   const appSet = new Set<String>();
-  //   for (const e of envs) {
-  //     for (const a of e.appinfos) {
-  //       if (appSet.has(a.group)) {
-  //         continue;
-  //       }
-  //       appSet.add(a.group);
-  //     }
-  //   }
-  //   for (const s of Array.from(appSet.values())) {
-  //     console.log(s);
-  //   }
-  //   return Array.from(appSet.values());
-  // }
-
   onLoad() {
     alert(this.myForm.value.appGroupCtl);
   }
 
-  onAppGroupChanged(value: String) {
-    console.log('onAppGroupChanged ' + value)
+  onAppGroupChanged(appGroupName: String) {
+    console.log('onAppGroupChanged ' + appGroupName)
+    const myEnvs = this.appGroupToEnvsMap.get(appGroupName);
+    this.poplulateAppCtl(myEnvs);
+    if (this.apps.length == 2) {
+      // Remove the "All" selection since there is only 1 real selection choice
+      this.apps.shift();
+    }
+    this.myForm.get("appCtl")?.patchValue(this.apps[0]);
   }
 }
