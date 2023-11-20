@@ -17,6 +17,7 @@ export class VersionComponent {
   appGroups!: String[];
   appGroupToEnvsMap = new Map<String, Array<Env>>;
   displayEnvs = new Array<Env>();
+  @ViewChild('submitBtn') submitBtn: any;
 
   // contactForm! means will be set later
   readonly myForm: FormGroup;
@@ -35,6 +36,10 @@ export class VersionComponent {
     this.myForm.get("appGroupCtl")?.valueChanges
       .subscribe(f => {
         this.onAppGroupChanged(f);
+      })
+    this.myForm.get("appCtl")?.valueChanges
+      .subscribe(f => {
+        this.onAppChanged(f);
       })
 
     this.setDefaultSelections();
@@ -92,17 +97,46 @@ export class VersionComponent {
   }
 
   private setDefaultSelections() {
+    // 2 ways of retrieving the control of interest
     this.myForm.get("appGroupCtl")?.patchValue("All");
-    this.myForm.get("appCtl")?.patchValue("All");
+    this.myForm.controls['appCtl'].patchValue("All");
   }
 
   onLoad() {
-    alert(this.myForm.value.appGroupCtl);
+    alert(this.myForm.value.appGroupCtl + " " + this.myForm.value.appCtl);
+    const appGroupName = this.myForm.controls['appGroupCtl'].value;
+    const appName = this.myForm.controls['appCtl'].value;
+    if (appName === "All" && appGroupName === "All") {
+      alert("Too large of a search, please narrow by making a selection.")
+      return;
+    }
+
+    const mySubmitBtn = document.getElementById("myBtn") as HTMLButtonElement
+    mySubmitBtn.disabled = true;
+    mySubmitBtn.disabled = false;
+
+
+    // const myEnvs = (appGroupName === "All") ? this.envs : this.appGroupToEnvsMap.get(appGroupName);
   }
 
-  onAppGroupChanged(appGroupName: String) {
+  private onAppChanged(appName: String) {
+    const appGroupName = this.myForm.controls['appGroupCtl'].value;
+    // this.submitBtn.nativeElement.disabled = (appGroupName === 'All' && appName === 'All');
+  }
+
+  private onAppGroupChanged(appGroupName: String) {
     console.log('onAppGroupChanged ' + appGroupName)
-    const myEnvs = this.appGroupToEnvsMap.get(appGroupName);
+    if (appGroupName === "All") {
+      return;
+    }
+    const myEnvs = (appGroupName === "All") ? this.envs : this.appGroupToEnvsMap.get(appGroupName);
+
+    // if (appGroupName === "All") {
+    //   this.myForm.controls['appCtl'].disable();
+    // } else {
+    //   this.myForm.controls['appCtl'].enable();
+    // }
+
     this.poplulateAppCtl(myEnvs);
     if (this.apps.length == 2) {
       // Remove the "All" selection since there is only 1 real selection choice
@@ -110,4 +144,8 @@ export class VersionComponent {
     }
     this.myForm.get("appCtl")?.patchValue(this.apps[0]);
   }
+
+  //TODO refactor as service calls
+  // callVersionEndpoints()
+
 }
