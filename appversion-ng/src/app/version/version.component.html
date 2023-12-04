@@ -10,16 +10,20 @@
   <form [formGroup]="myForm" (ngSubmit)="onLoad()">
 
     <p>
+      <label for="envCtl"> Environs </label>
+      <select formControlName="envCtl">
+        <option >All</option>
+        <option *ngFor="let env of envs" [ngValue]="env">{{env.name}}</option>
+      </select>
+      <br>
 
       <label for="appGroupCtl"> App Groups </label>
       <select formControlName="appGroupCtl">
-<!--        <option >All</option>-->
         <option *ngFor="let appGroup of appGroups" [ngValue]="appGroup">{{appGroup}}</option>
       </select>
       <br>
       <label for="appCtl"> Apps </label>
       <select formControlName="appCtl">
-<!--        <option >All</option>-->
         <option *ngFor="let app of apps" [ngValue]="app">{{app}}</option>
       </select>
 

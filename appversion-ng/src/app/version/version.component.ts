@@ -1,5 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
-import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, FormControl, Validators, AbstractControl} from '@angular/forms';
 import {Observable} from "rxjs";
 import jwt_decode from 'jwt-decode';
 import {Env} from "../model/Env";
@@ -11,36 +11,46 @@ import {AppInfo} from "../model/AppInfo";
   templateUrl: './version.component.html'
 })
 
-export class VersionComponent {
-  private readonly envs: Array<Env>;
+export class VersionComponent implements OnInit {
+  envs!: Array<Env>;
   apps!: String[];
   appGroups!: String[];
-  appGroupToEnvsMap = new Map<String, Array<Env>>;
-  displayEnvs = new Array<Env>();
-  @ViewChild('submitBtn') submitBtn: any;
+  // The envs will only have app infos belonging to the appGroup
+  appGroupToFilteredEnvsMap = new Map<String, Array<Env>>;
 
-  // contactForm! means will be set later
-  readonly myForm: FormGroup;
+  envCtl!: AbstractControl;
+  appCtl!: AbstractControl;
+  appGroupCtl!: AbstractControl;
+  submitBtn: any;
+
+  @ViewChild('submitBtn') submitBtnChild: any;
+
+  // myForm! means will be set later
+  readonly myForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.envs = JSON.parse(ENV_INFOS) as Array<Env>;
-    this.poplulateAppCtl(this.envs);
-    this.populateAppGroupCtl();
-    this.populateAppGroupToEnvsMap();
-
     this.myForm = this.fb.group({
+      envCtl: [null],
       appGroupCtl: [null],
       appCtl: [null]
     });
+  }
 
-    this.myForm.get("appGroupCtl")?.valueChanges
-      .subscribe(f => {
-        this.onAppGroupChanged(f);
-      })
-    this.myForm.get("appCtl")?.valueChanges
-      .subscribe(f => {
-        this.onAppChanged(f);
-      })
+  ngOnInit() {
+    this.envs = JSON.parse(ENV_INFOS) as Array<Env>;
+    this.poplulateAppCtl(this.envs);
+    this.populateAppGroupCtl();
+    this.populateAppGroupToFilteredEnvsMap();
+
+    this.envCtl = this.myForm.controls['envCtl'];
+    this.appGroupCtl = this.myForm.controls['appGroupCtl'];
+    this.appCtl = this.myForm.controls['appCtl'];
+    this.submitBtn = document.getElementById("myBtn") as HTMLButtonElement;
+
+    // this.myForm.get("appGroupCtl")?.valueChanges
+    this.appGroupCtl.valueChanges.subscribe(f => { this.onAppGroupChanged(f); })
+    // this.myForm.get("appCtl")?.valueChanges
+    this.appCtl.valueChanges.subscribe(f => { this.onAppChanged(f); })
 
     this.setDefaultSelections();
   }
@@ -74,9 +84,9 @@ export class VersionComponent {
     this.apps.splice(0, 0, "All");
   }
 
-  private populateAppGroupToEnvsMap() {
+  private populateAppGroupToFilteredEnvsMap() {
     for(const appGroup of this.appGroups) {
-      this.appGroupToEnvsMap.set(appGroup, new Array<Env>);
+      this.appGroupToFilteredEnvsMap.set(appGroup, new Array<Env>);
     }
 
     for(const appGroup of this.appGroups) {
@@ -90,59 +100,46 @@ export class VersionComponent {
             nuEnv.appInfos.push(a);
           }
         }
-        this.appGroupToEnvsMap.get(appGroup)?.push(nuEnv);
+        this.appGroupToFilteredEnvsMap.get(appGroup)?.push(nuEnv);
       }
     }
     console.log("done");
   }
 
   private setDefaultSelections() {
-    // 2 ways of retrieving the control of interest
+    // 3 ways of retrieving the control of interest
+    this.envCtl.patchValue("All");
     this.myForm.get("appGroupCtl")?.patchValue("All");
     this.myForm.controls['appCtl'].patchValue("All");
   }
 
   onLoad() {
-    alert(this.myForm.value.appGroupCtl + " " + this.myForm.value.appCtl);
-    const appGroupName = this.myForm.controls['appGroupCtl'].value;
-    const appName = this.myForm.controls['appCtl'].value;
-    if (appName === "All" && appGroupName === "All") {
+    alert(this.appGroupCtl.value + " " + this.appCtl.value);
+
+    if (this.appCtl.value === "All" && this.appGroupCtl.value === "All") {
       alert("Too large of a search, please narrow by making a selection.")
+      this.submitBtn.disabled = true;
       return;
     }
-
-    const mySubmitBtn = document.getElementById("myBtn") as HTMLButtonElement
-    mySubmitBtn.disabled = true;
-    mySubmitBtn.disabled = false;
-
-
-    // const myEnvs = (appGroupName === "All") ? this.envs : this.appGroupToEnvsMap.get(appGroupName);
-  }
-
-  private onAppChanged(appName: String) {
-    const appGroupName = this.myForm.controls['appGroupCtl'].value;
-    // this.submitBtn.nativeElement.disabled = (appGroupName === 'All' && appName === 'All');
+    this.submitBtn.disabled = false;
   }
 
   private onAppGroupChanged(appGroupName: String) {
     console.log('onAppGroupChanged ' + appGroupName)
-    if (appGroupName === "All") {
-      return;
-    }
-    const myEnvs = (appGroupName === "All") ? this.envs : this.appGroupToEnvsMap.get(appGroupName);
-
-    // if (appGroupName === "All") {
-    //   this.myForm.controls['appCtl'].disable();
-    // } else {
-    //   this.myForm.controls['appCtl'].enable();
-    // }
+    if (appGroupName === "All") { return; }
+    const myEnvs = (appGroupName === "All") ? this.envs : this.appGroupToFilteredEnvsMap.get(appGroupName);
 
     this.poplulateAppCtl(myEnvs);
     if (this.apps.length == 2) {
       // Remove the "All" selection since there is only 1 real selection choice
       this.apps.shift();
     }
-    this.myForm.get("appCtl")?.patchValue(this.apps[0]);
+    this.appCtl.patchValue(this.apps[0]);
+  }
+
+  private onAppChanged(appName: String) {
+    console.log('onAppChanged ' + appName)
+    this.submitBtn.disabled = (this.appCtl.value === "All" && this.appGroupCtl.value === "All");
   }
 
   //TODO refactor as service calls
