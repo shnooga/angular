@@ -12,21 +12,21 @@ import {AppInfo} from "../model/AppInfo";
 })
 
 export class VersionComponent implements OnInit {
+  // envs! means will be set later
   envs!: Array<Env>;
   apps!: String[];
   appGroups!: String[];
-  // The envs will only have app infos belonging to the appGroup
-  appGroupToFilteredEnvsMap = new Map<String, Array<Env>>;
+  // The envs will only have app infos belonging to the corresponding appGroup
+  appGroupToFilteredEnvsMap!: Map<String, Array<Env>>;
 
+  readonly myForm!: FormGroup;
   envCtl!: AbstractControl;
   appCtl!: AbstractControl;
   appGroupCtl!: AbstractControl;
   submitBtn: any;
 
-  @ViewChild('submitBtn') submitBtnChild: any;
+  // @ViewChild('submitBtn') submitBtnChild: any;
 
-  // myForm! means will be set later
-  readonly myForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.myForm = this.fb.group({
@@ -37,11 +37,6 @@ export class VersionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.envs = JSON.parse(ENV_INFOS) as Array<Env>;
-    this.poplulateAppCtl(this.envs);
-    this.populateAppGroupCtl();
-    this.populateAppGroupToFilteredEnvsMap();
-
     this.envCtl = this.myForm.controls['envCtl'];
     this.appGroupCtl = this.myForm.controls['appGroupCtl'];
     this.appCtl = this.myForm.controls['appCtl'];
@@ -52,6 +47,10 @@ export class VersionComponent implements OnInit {
     // this.myForm.get("appCtl")?.valueChanges
     this.appCtl.valueChanges.subscribe(f => { this.onAppChanged(f); })
 
+    this.envs = JSON.parse(ENV_INFOS) as Array<Env>;
+    this.poplulateAppCtl(this.envs);
+    this.populateAppGroupCtl();
+    this.populateAppGroupToFilteredEnvsMap();
     this.setDefaultSelections();
   }
 
@@ -85,16 +84,25 @@ export class VersionComponent implements OnInit {
   }
 
   private populateAppGroupToFilteredEnvsMap() {
+    let envSelected = (this.envCtl.value == undefined) ? "All" : this.envCtl.value.name;
+
+    this.appGroupToFilteredEnvsMap = new Map<String, Array<Env>>;
     for(const appGroup of this.appGroups) {
       this.appGroupToFilteredEnvsMap.set(appGroup, new Array<Env>);
     }
 
     for(const appGroup of this.appGroups) {
       for(const e of this.envs) {
+        // Filter out unwanted environs
+        if (envSelected !== "All" && envSelected !== e.name) {
+          continue;
+        }
+
         const nuEnv = new Env();
         nuEnv.name = e.name;
         nuEnv.appInfos = new Array<AppInfo>;
 
+        // Filter out Apps in unwanted App Group
         for(const a of e.appInfos) {
           if (a.group === appGroup) {
             nuEnv.appInfos.push(a);
@@ -103,7 +111,6 @@ export class VersionComponent implements OnInit {
         this.appGroupToFilteredEnvsMap.get(appGroup)?.push(nuEnv);
       }
     }
-    console.log("done");
   }
 
   private setDefaultSelections() {
@@ -114,19 +121,24 @@ export class VersionComponent implements OnInit {
   }
 
   onLoad() {
-    alert(this.appGroupCtl.value + " " + this.appCtl.value);
+    // alert("Env: \"" + this.envCtl.value.name + "\" App Group: \"" + this.appGroupCtl.value + "\" App: " + this.appCtl.value + "\"");
+    console.log("Env: \"" + this.envCtl.value.name + "\" App Group: \"" + this.appGroupCtl.value + "\" App: \"" + this.appCtl.value + "\"");
 
     if (this.appCtl.value === "All" && this.appGroupCtl.value === "All") {
       alert("Too large of a search, please narrow by making a selection.")
       this.submitBtn.disabled = true;
       return;
     }
-    this.submitBtn.disabled = false;
+    this.populateAppGroupToFilteredEnvsMap();
+    console.log("blah");
+    // this.submitBtn.disabled = false;
   }
 
   private onAppGroupChanged(appGroupName: String) {
-    console.log('onAppGroupChanged ' + appGroupName)
+    this.submitBtn.disabled = (this.appCtl.value === "All" && appGroupName === "All");
     if (appGroupName === "All") { return; }
+
+    this.submitBtn.disabled = false;
     const myEnvs = (appGroupName === "All") ? this.envs : this.appGroupToFilteredEnvsMap.get(appGroupName);
 
     this.poplulateAppCtl(myEnvs);
@@ -138,7 +150,6 @@ export class VersionComponent implements OnInit {
   }
 
   private onAppChanged(appName: String) {
-    console.log('onAppChanged ' + appName)
     this.submitBtn.disabled = (this.appCtl.value === "All" && this.appGroupCtl.value === "All");
   }
 

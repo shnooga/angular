@@ -6,7 +6,7 @@ export const ENV_INFOS = `
       {
         "name": "student-info-sys",
         "group": "CLR",
-        "url": "https://StudentInformationSystem.stage.wgu.edu/actuator/info"
+        "url": "https://StudentInformationSystem.development.wgu.edu/actuator/info"
       },
       {
         "name": "AA-Pathways",
@@ -21,7 +21,7 @@ export const ENV_INFOS = `
       {
         "name": "AA-Achievements",
         "group": "DMND",
-        "url": "https://StudentInformationSystem.stage.wgu.edu/actuator/info"
+        "url": "https://aa-achievement.development.wgu.edu/actuator/info"
       }
     ]
   },
@@ -36,7 +36,7 @@ export const ENV_INFOS = `
       {
         "name": "AA-Achievements",
         "group": "DMND",
-        "url": "https://StudentInformationSystem.stage.wgu.edu/actuator/info"
+        "url": "https://aa-achievement.stage.wgu.edu/actuator/info"
       }
     ]
   },
@@ -46,12 +46,12 @@ export const ENV_INFOS = `
       {
         "name": "student-info-sys",
         "group": "CLR",
-        "url": "https://StudentInformationSystem.stage.wgu.edu/actuator/info"
+        "url": "https://StudentInformationSystem.prod.wgu.edu/actuator/info"
       },
       {
         "name": "AA-Achievements",
         "group": "DMND",
-        "url": "https://StudentInformationSystem.stage.wgu.edu/actuator/info"
+        "url": "https://aa-achievement.prod.wgu.edu/actuator/info"
       }
     ]
   }
