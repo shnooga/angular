@@ -2,10 +2,10 @@
 
 <div>
 
-<!--  <div class="card-title">-->
-<!--    <i class="fas fa-user-plus"></i>-->
-<!--    <input type="button" value="Refresh" class="btn btn-primary fas fa-coffee fa-xs" (click)="onLoad()">-->
-<!--  </div>-->
+  <!--  <div class="card-title">-->
+  <!--    <i class="fas fa-user-plus"></i>-->
+  <!--    <input type="button" value="Refresh" class="btn btn-primary fas fa-coffee fa-xs" (click)="onLoad()">-->
+  <!--  </div>-->
 
   <form [formGroup]="myForm" (ngSubmit)="onLoad()">
 
@@ -26,10 +26,22 @@
       <select formControlName="appCtl">
         <option *ngFor="let app of apps" [ngValue]="app">{{app}}</option>
       </select>
-
       <br>
-      <button #submitBtn id="myBtn" type="submit">Refresh</button>
-    </p>
+    <div>
+      <label>
+        <input type="radio" name="format" value="pretty" (change)="selectedFormat = 'pretty'" checked> Pretty
+      </label>
+      <label>
+        <input type="radio" name="format" value="json" (change)="selectedFormat = 'json'"> Json
+      </label>
+      <p>You selected: {{ selectedFormat }}</p>
+    </div>
+    <!--      <format-buttons></format-buttons>-->
+    <!--      <mat-radio-button [aria-label]="getAvailableFormat()"> </mat-radio-button>-->
+
+
+    <br>
+    <button #submitBtn id="myBtn" type="submit">Refresh</button>
 
   </form>
 

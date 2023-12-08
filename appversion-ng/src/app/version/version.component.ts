@@ -4,11 +4,19 @@ import {Observable} from "rxjs";
 import jwt_decode from 'jwt-decode';
 import {Env} from "../model/Env";
 import {ENV_INFOS} from "../model/global";
+import {ACHIEVEMENT_JSON} from "../services/achievement_json";
+import {CRAP_JSON} from "../services/crap_json";
+import {PATHWAY_JSON} from "../services/pathway_json";
+import {SKILL_JSON} from "../services/skill_json";
 import {AppInfo} from "../model/AppInfo";
+import {AppInfoUtil} from "../services/AppInfoUtil";
+import {STUDENTINFO_JSON} from "../services/studentinfo_json";
+import {AppInfoNu} from "../model/AppInfoNu";
 
 @Component({
   selector: 'version',
-  templateUrl: './version.component.html'
+  templateUrl: './version.component.html',
+  providers: [AppInfoUtil]
 })
 
 export class VersionComponent implements OnInit {
@@ -25,10 +33,12 @@ export class VersionComponent implements OnInit {
   appGroupCtl!: AbstractControl;
   submitBtn: any;
 
+  selectedFormat: string='NOTHING';
+
   // @ViewChild('submitBtn') submitBtnChild: any;
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private appInfoUtil: AppInfoUtil) {
     this.myForm = this.fb.group({
       envCtl: [null],
       appGroupCtl: [null],
@@ -84,7 +94,7 @@ export class VersionComponent implements OnInit {
   }
 
   private populateAppGroupToFilteredEnvsMap() {
-    let envSelected = (this.envCtl.value == undefined) ? "All" : this.envCtl.value.name;
+    let envSelected = (this.envCtl.value == undefined || this.envCtl.value.name == undefined) ? "All" : this.envCtl.value.name;
 
     this.appGroupToFilteredEnvsMap = new Map<String, Array<Env>>;
     for(const appGroup of this.appGroups) {
@@ -121,8 +131,9 @@ export class VersionComponent implements OnInit {
   }
 
   onLoad() {
+    let appGroupName = this.appGroupCtl.value;
     // alert("Env: \"" + this.envCtl.value.name + "\" App Group: \"" + this.appGroupCtl.value + "\" App: " + this.appCtl.value + "\"");
-    console.log("Env: \"" + this.envCtl.value.name + "\" App Group: \"" + this.appGroupCtl.value + "\" App: \"" + this.appCtl.value + "\"");
+    console.log("Env: \"" + this.envCtl.value.name + "\" App Group: \"" + appGroupName + "\" App: \"" + this.appCtl.value + "\"");
 
     if (this.appCtl.value === "All" && this.appGroupCtl.value === "All") {
       alert("Too large of a search, please narrow by making a selection.")
@@ -130,8 +141,39 @@ export class VersionComponent implements OnInit {
       return;
     }
     this.populateAppGroupToFilteredEnvsMap();
-    console.log("blah");
+    let envsOfInterest = this.appGroupToFilteredEnvsMap.get(appGroupName) as Array<Env>;
+    // let envs = (envsOfInterest == undefined || false)
+    this.handleOnRefresh(envsOfInterest);
+    // console.log("blah");
     // this.submitBtn.disabled = false;
+  }
+
+  private handleOnRefresh(envs: Array<Env>) {
+    // let achievementObj = this.appInfoUtil.extractObject(ACHIEVEMENT_JSON);
+    // let crapObj = this.appInfoUtil.extractObject(CRAP_JSON);
+    // let pathwayObj = this.appInfoUtil.extractObject(PATHWAY_JSON);
+    // let skillObj = this.appInfoUtil.extractObject(SKILL_JSON) as any;
+
+    // let myObj = this.appInfoUtil.extractAppInfo(STUDENTINFO_JSON, this.appCtl.value);
+    // if (myObj === undefined) throw "Unable to extract AppInfo from Json with appName: " + this.appCtl.value;
+    // let appInfo: AppInfo =  myObj[this.appCtl.value];
+    // console.log("name: \"" + myObj.name + " artifact: \"" + myObj.artifact + "\" version: \"" + myObj.version + "\" time: \"" + myObj.time + "\" liveColor: \"" + myObj.liveColor + "\"");
+
+
+
+    // appInfo.
+
+    for(const e of envs) {
+      console.log(e.name);
+      for(const a of e.appInfos) {
+        console.log(" " + a.name + " : " + a.url)
+        let appInfoNu = new AppInfoNu();
+        this.appInfoUtil.getVersionInfo(a.name, a.url, appInfoNu);
+        console.log(" " + a.name + " : " + a.url)
+      }
+    }
+
+
   }
 
   private onAppGroupChanged(appGroupName: String) {
@@ -151,6 +193,11 @@ export class VersionComponent implements OnInit {
 
   private onAppChanged(appName: String) {
     this.submitBtn.disabled = (this.appCtl.value === "All" && this.appGroupCtl.value === "All");
+  }
+
+  private getAvailableFormat(): String[] {
+    let formats: String[] =['pretty', 'json']
+    return formats;
   }
 
   //TODO refactor as service calls

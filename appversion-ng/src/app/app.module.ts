@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { VersionComponent } from "./version/version.component";
 import {CountryComponent} from "./country/country.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {RadioButtonsComponent} from "./radio-format/radio-format.component";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -13,11 +15,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     VersionComponent,
     CountryComponent,
+    RadioButtonsComponent,
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [],
