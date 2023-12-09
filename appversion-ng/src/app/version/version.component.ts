@@ -8,10 +8,10 @@ import {ACHIEVEMENT_JSON} from "../services/achievement_json";
 import {CRAP_JSON} from "../services/crap_json";
 import {PATHWAY_JSON} from "../services/pathway_json";
 import {SKILL_JSON} from "../services/skill_json";
-import {AppInfo} from "../model/AppInfo";
+import {VersionRequest} from "../model/VersionRequest";
 import {AppInfoUtil} from "../services/AppInfoUtil";
 import {STUDENTINFO_JSON} from "../services/studentinfo_json";
-import {AppInfoNu} from "../model/AppInfoNu";
+import {AppInfo} from "../model/AppInfo";
 
 @Component({
   selector: 'version',
@@ -68,7 +68,7 @@ export class VersionComponent implements OnInit {
     const appGroupNameSet = new Set<String>();
     for (const e of this.envs) {
       // TODO: refactor this; not efficient
-      e.appInfos.forEach(a => {
+      e.versionRequests.forEach(a => {
         appGroupNameSet.add(a.group);
         console.log(a.group);
       });
@@ -84,7 +84,7 @@ export class VersionComponent implements OnInit {
     const appNameSet = new Set<String>();
     for (const e of myEnvs) {
       // TODO: refactor this; not efficient
-      e.appInfos.forEach(a => {
+      e.versionRequests.forEach(a => {
         appNameSet.add(a.name);
         console.log(a.name);
       });
@@ -110,12 +110,12 @@ export class VersionComponent implements OnInit {
 
         const nuEnv = new Env();
         nuEnv.name = e.name;
-        nuEnv.appInfos = new Array<AppInfo>;
+        nuEnv.versionRequests = new Array<VersionRequest>;
 
         // Filter out Apps in unwanted App Group
-        for(const a of e.appInfos) {
+        for(const a of e.versionRequests) {
           if (a.group === appGroup) {
-            nuEnv.appInfos.push(a);
+            nuEnv.versionRequests.push(a);
           }
         }
         this.appGroupToFilteredEnvsMap.get(appGroup)?.push(nuEnv);
@@ -149,31 +149,13 @@ export class VersionComponent implements OnInit {
   }
 
   private handleOnRefresh(envs: Array<Env>) {
-    // let achievementObj = this.appInfoUtil.extractObject(ACHIEVEMENT_JSON);
-    // let crapObj = this.appInfoUtil.extractObject(CRAP_JSON);
-    // let pathwayObj = this.appInfoUtil.extractObject(PATHWAY_JSON);
-    // let skillObj = this.appInfoUtil.extractObject(SKILL_JSON) as any;
-
-    // let myObj = this.appInfoUtil.extractAppInfo(STUDENTINFO_JSON, this.appCtl.value);
-    // if (myObj === undefined) throw "Unable to extract AppInfo from Json with appName: " + this.appCtl.value;
-    // let appInfo: AppInfo =  myObj[this.appCtl.value];
-    // console.log("name: \"" + myObj.name + " artifact: \"" + myObj.artifact + "\" version: \"" + myObj.version + "\" time: \"" + myObj.time + "\" liveColor: \"" + myObj.liveColor + "\"");
-
-
-
-    // appInfo.
-
     for(const e of envs) {
-      console.log(e.name);
-      for(const a of e.appInfos) {
-        console.log(" " + a.name + " : " + a.url)
-        let appInfoNu = new AppInfoNu();
-        this.appInfoUtil.getVersionInfo(a.name, a.url, appInfoNu);
-        console.log(" " + a.name + " : " + a.url)
+      for(const request of e.versionRequests) {
+        console.log("Env: " + e.name + " " + request.name + " : " + request.url)
+        let appInfoNu = new AppInfo();
+        this.appInfoUtil.getVersionInfo(request, appInfoNu);
       }
     }
-
-
   }
 
   private onAppGroupChanged(appGroupName: String) {

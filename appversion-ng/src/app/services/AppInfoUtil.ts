@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
+import {VersionRequest} from "../model/VersionRequest";
 import {AppInfo} from "../model/AppInfo";
-import {AppInfoNu} from "../model/AppInfoNu";
 import {HttpClient} from "@angular/common/http";
 import {BuildInfo} from "../model/BuildInfo";
 
@@ -11,24 +11,24 @@ export class AppInfoUtil {
   constructor(private httpClient: HttpClient) {
   }
 
-  extractAppInfo(json: string, appName: string): AppInfo {
+  extractAppInfo(json: string, appName: string): VersionRequest {
     let myObj = JSON.parse(json) as any;
-    return myObj[appName] as AppInfo;
+    return myObj[appName] as VersionRequest;
   }
 
-  getVersionInfo(appName: string, uri: string, appInfo: AppInfoNu) {
+  getVersionInfo(request: VersionRequest, appInfo: AppInfo) {
     this.httpClient
-      .get<Object>(uri)
+      .get<Object>(request.url)
       // .subscribe( r => this.handleNext(r)); // Short hand for next only.
       .subscribe({
-        next: (r: Object) => this.handleNext(r, appName, appInfo),
+        next: (r: Object) => this.handleNext(r, request.name, appInfo),
         // error: (e: Error) => this.handleError(e.message),
         complete: () => console.log("Stream completed")
       });
   }
 
-  handleNext(response: Object, appName: string, appInfo: AppInfoNu) {
-    console.log(response);
+  handleNext(response: Object, appName: string, appInfo: AppInfo) {
+    appInfo.jsonValue = JSON.stringify(response);
     let liveColor = "";
     let s = JSON.stringify(response[appName as keyof typeof response]);
     if (s !== undefined) {

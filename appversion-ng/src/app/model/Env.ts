@@ -1,6 +1,6 @@
-import {AppInfo} from "./AppInfo";
+import {VersionRequest} from "./VersionRequest";
 
 export class Env {
   name = "";
-  appInfos = new Array<AppInfo>;
+  versionRequests = new Array<VersionRequest>;
 }
