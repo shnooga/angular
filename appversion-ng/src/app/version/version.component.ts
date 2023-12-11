@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, FormControl, Validators, AbstractControl} from '@angular/forms';
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import jwt_decode from 'jwt-decode';
 import {Env} from "../model/Env";
 import {ENV_INFOS} from "../model/global";
@@ -20,6 +20,9 @@ import {AppInfo} from "../model/AppInfo";
 })
 
 export class VersionComponent implements OnInit {
+  isRefresh$: Observable<boolean>;
+  envData$: Observable<Array<Env>>;
+
   // envs! means will be set later
   envs!: Array<Env>;
   apps!: String[];
@@ -38,7 +41,9 @@ export class VersionComponent implements OnInit {
   // @ViewChild('submitBtn') submitBtnChild: any;
 
 
-  constructor(private fb: FormBuilder, private appInfoUtil: AppInfoUtil) {
+  constructor(private fb: FormBuilder, private util: AppInfoUtil) {
+    this.isRefresh$ = util.isRefresh$;
+    this.envData$ = util.envData$;
     this.myForm = this.fb.group({
       envCtl: [null],
       appGroupCtl: [null],
@@ -152,10 +157,10 @@ export class VersionComponent implements OnInit {
     for(const e of envs) {
       for(const request of e.versionRequests) {
         console.log("Env: " + e.name + " " + request.name + " : " + request.url)
-        let appInfoNu = new AppInfo();
-        this.appInfoUtil.getVersionInfo(request, appInfoNu);
+        this.util.getVersionInfo(e, request);
       }
     }
+    this.util.handleOnRefresh(envs);
   }
 
   private onAppGroupChanged(appGroupName: String) {

@@ -1,48 +1,109 @@
-<h1>Hello world</h1>
-
 <div>
+  <div>
 
-  <!--  <div class="card-title">-->
-  <!--    <i class="fas fa-user-plus"></i>-->
-  <!--    <input type="button" value="Refresh" class="btn btn-primary fas fa-coffee fa-xs" (click)="onLoad()">-->
-  <!--  </div>-->
+    <!--  <div class="card-title">-->
+    <!--    <i class="fas fa-user-plus"></i>-->
+    <!--    <input type="button" value="Refresh" class="btn btn-primary fas fa-coffee fa-xs" (click)="onLoad()">-->
+    <!--  </div>-->
 
-  <form [formGroup]="myForm" (ngSubmit)="onLoad()">
+    <form [formGroup]="myForm" (ngSubmit)="onLoad()">
 
-    <p>
-      <label for="envCtl"> Environs </label>
-      <select formControlName="envCtl">
-        <option >All</option>
-        <option *ngFor="let env of envs" [ngValue]="env">{{env.name}}</option>
-      </select>
+      <p>
+        <label for="envCtl"> Environs </label>
+        <select formControlName="envCtl">
+          <option >All</option>
+          <option *ngFor="let env of envs" [ngValue]="env">{{env.name}}</option>
+        </select>
+        <br>
+
+        <label for="appGroupCtl"> App Groups </label>
+        <select formControlName="appGroupCtl">
+          <option *ngFor="let appGroup of appGroups" [ngValue]="appGroup">{{appGroup}}</option>
+        </select>
+        <br>
+        <label for="appCtl"> Apps </label>
+        <select formControlName="appCtl">
+          <option *ngFor="let app of apps" [ngValue]="app">{{app}}</option>
+        </select>
+        <br>
+      <div>
+        <label>
+          <input type="radio" name="format" value="pretty" (change)="selectedFormat = 'pretty'" checked> Pretty
+        </label>
+        <label>
+          <input type="radio" name="format" value="json" (change)="selectedFormat = 'json'"> Json
+        </label>
+        <p>You selected: {{ selectedFormat }}</p>
+      </div>
+      <!--      <format-buttons></format-buttons>-->
+      <!--      <mat-radio-button [aria-label]="getAvailableFormat()"> </mat-radio-button>-->
+
+
       <br>
+      <button #submitBtn id="myBtn" type="submit">Refresh</button>
 
-      <label for="appGroupCtl"> App Groups </label>
-      <select formControlName="appGroupCtl">
-        <option *ngFor="let appGroup of appGroups" [ngValue]="appGroup">{{appGroup}}</option>
-      </select>
-      <br>
-      <label for="appCtl"> Apps </label>
-      <select formControlName="appCtl">
-        <option *ngFor="let app of apps" [ngValue]="app">{{app}}</option>
-      </select>
-      <br>
-    <div>
-      <label>
-        <input type="radio" name="format" value="pretty" (change)="selectedFormat = 'pretty'" checked> Pretty
-      </label>
-      <label>
-        <input type="radio" name="format" value="json" (change)="selectedFormat = 'json'"> Json
-      </label>
-      <p>You selected: {{ selectedFormat }}</p>
-    </div>
-    <!--      <format-buttons></format-buttons>-->
-    <!--      <mat-radio-button [aria-label]="getAvailableFormat()"> </mat-radio-button>-->
+    </form>
+  </div>
 
 
-    <br>
-    <button #submitBtn id="myBtn" type="submit">Refresh</button>
+  <div class="card" *ngIf="isRefresh$|async">
+      <div class="card" ngForm #myForm="ngForm">
+        <h5 class="card-header">Version Infos</h5>
 
-  </form>
+        <table class="table table-striped table-bordered">
+          <tr *ngFor="let e of (envData$|async)"><td>
+            <table border="1">
+              <tr>
+                <th>{{e.name}}</th><th>Version</th>
+              </tr>
+              <tr>
+                <td>cell a</td><td>cell b</td>
+              </tr>
+            </table>
+          </td></tr>
+        </table>
+
+
+      </div>
+  </div>
 
 </div>
+
+
+<table border=1 >
+  <tbody>
+  <tr *ngFor="let e of (envData$|async)">
+    <td>
+      <table>
+        <tbody>
+        <tr>
+          <td style="text-align: center;">{{e.name}}</td>
+        </tr>
+        <tr *ngFor="let a of e.appInfos">
+          <td>
+            <table border=2 style="width: 700px;">
+              <tbody>
+              <tr>
+                <td style="width: 80px;">Name</td>
+                <td style="width: 100px;">Group</td>
+                <td style="width: 70px;">Version</td>
+                <td style="width: 300px;">Date</td>
+                <td style="width: 150px;">FargateColor</td>
+              </tr>
+              <tr>
+                <td>{{a.buildInfos[0].name}}</td>
+                <td>{{a.buildInfos[0].group}}</td>
+                <td>{{a.buildInfos[0].version}}</td>
+                <td>{{a.buildInfos[0].time}}</td>
+                <td>{{a.buildInfos[0].liveColor}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
