@@ -59,6 +59,7 @@ app.post("/signin", (req, res) => {
         expiresIn: jwtExpirySeconds,
       }
     );
+    console.log(token);
     res.send({ token: token });
     res.end();
   } catch (err) {
@@ -82,14 +83,19 @@ app.use((req, res, next) => {
 });
 app.post("/customers", (req, res) => {
   try {
+    console.log(req.body);
     const { firstName, lastName } = req.body;
-    if (!firstName || typeof firstName !== "string") {
-      res.send("Invalid FirstName!");
-      return;
+    // if (!firstName || typeof firstName !== "string") {
+    if (!firstName) {
+      throw new Error("Invalid FirstName!");
+      // res.send("Invalid FirstName!");
+      // return;
     }
-    if (!lastName || typeof lastName !== "string") {
-      res.send("Invalid LastName!");
-      return;
+    // if (!lastName || typeof lastName !== "string") {
+    if (!lastName) {
+      throw new Error("Invalid LastName!");
+      // res.send("Invalid LastName!");
+      // return;
     }
     customers.push({ firstName: firstName, lastName: lastName });
     res.send({status:"success"});

@@ -1,0 +1,20 @@
+<div class="card" ngForm #myForm="ngForm">
+    <h5 class="card-header">Add new Customer</h5>
+        <div class="form-group">
+            <label for="FName">First Name:</label>
+            <input class="form-control" [ngClass]="{'is-valid':F.valid, 'is-invalid':F.invalid}" name="FName" type="text" [(ngModel)]="this.FirstName" required minlength="3" #F="ngModel">
+            <div class="alert alert-danger" [hidden]="!(F.dirty && F.errors?.required)"> Enter FName wanker!!</div>
+            <div class="alert alert-danger" [hidden]="!(F.dirty && F.errors?.minlength)"> Min 3 chars wanker!!</div>
+        </div>
+        <div class="form-group">
+            <label for="LName">Last Name:</label>
+            <input class="form-control" [ngClass]="{'is-valid':L.valid, 'is-invalid':L.invalid}" name="LName" type="text" [(ngModel)]="this.LastName" required minlength="3" #L="ngModel">
+            <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.required)"> Enter FName wanker!!</div>
+            <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.minlength)"> Min 3 chars wanker!!</div>
+<!--            <div class="alert alert-danger" [hidden]="FailsRequired('LName')"> Enter LName wanker!!</div>-->
+<!--            <div class="alert alert-danger" [hidden]="FailsMinChar('LName')"> Min 3 chars wanker!!</div>-->
+        </div>
+        <input type="button" class="btn btn-success" value="Save" (click)="Save()" [disabled]="myForm.invalid">
+        &nbsp;
+        <input type="button" class="btn btn-danger" value="Cancel" (click)="Cancel()">
+</div>
