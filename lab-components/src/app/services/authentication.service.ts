@@ -4,15 +4,17 @@ import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {Router} from "@angular/router";
+import {AppConfigService} from "./appconfig.service";
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
 
-    constructor(private router: Router, private httpClient: HttpClient) { }
+    constructor(private appConfigService: AppConfigService,private router: Router, private httpClient: HttpClient) {
+    }
 
     authenticate(user: User) {
         this.httpClient
-            .post<AuthenticationResponse>('http://localhost:4000/signin', user)
+            .post<AuthenticationResponse>(`${this.appConfigService.apiUrl}/signin`, user)
             // .subscribe( r => this.handleNext(r)); // Short hand for next only.
             .subscribe({
                 next: (r: AuthenticationResponse) => this.handleNext(r),
@@ -20,6 +22,23 @@ export class AuthenticationService {
                 complete: () => console.log("Stream completed")
             });
     }
+
+    /*
+    authenticate(user: User): void {
+        // Change no 3 - Observable is subscribed
+        this.httpClient
+            .post<AuthenticationResponse>( `${this.appConfigService.apiUrl}/signin`, user)
+            .subscribe((response: { token: string }) => {
+            if (response.token !== undefined) {
+                localStorage.token = response.token;
+                this.router.navigate(['customer']);
+            }else{
+                // Change 5 - Notify subscriber that credentials are invalid
+                this.isAuthenticationFailedSubject.next(true);
+            }
+        });
+    }
+    */
 
     private handleNext(response: AuthenticationResponse) {
         if (response.token !== undefined) {

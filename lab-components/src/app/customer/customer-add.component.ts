@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, ViewChild} from "@angular/core";
+import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} from "@angular/core";
 import {NgForm} from "@angular/forms";
 import {Customer} from "../model/customer";
 @Component({
@@ -6,11 +6,13 @@ import {Customer} from "../model/customer";
     templateUrl: './customer-add.component.html'
 })
 
-export class CustomerAddComponent{
+export class CustomerAddComponent implements AfterViewInit {
     FirstName: string;
     LastName: string;
 
     @ViewChild('myForm') CustomerForm: NgForm;
+    @ViewChild('firstName') FirstNameControl: ElementRef;
+
     Reset() {
         this.CustomerForm.reset();
     }
@@ -24,6 +26,14 @@ export class CustomerAddComponent{
     Cancel() {
         this.OnCancel.emit();
         this.Reset();
+    }
+
+    constructor() {
+        this.FirstNameControl.nativeElement.focus();
+    }
+
+    ngAfterViewInit(): void {
+        this.FirstNameControl.nativeElement.focus();
     }
 
     // FailsRequired(inputName: string): boolean {

@@ -3,6 +3,7 @@ import {Customer} from "../model/customer";
 import {BehaviorSubject, map, Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Customerinfo} from "../model/customerinfo";
+import {AppConfigService} from "./appconfig.service";
 
 @Injectable()
 export class CustomerService {
@@ -12,13 +13,14 @@ export class CustomerService {
     Customers$ = this.CustomersSubject.asObservable();
     IsAddNew$ = this.IsAddNewSubject.asObservable();
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private appConfigService: AppConfigService, private httpClient: HttpClient) {
         this.LoadCustomers();
     }
 
     private LoadCustomers() {
         this.httpClient.get<Array<Customerinfo>>(
-            'http://localhost:4000/customers',
+            // 'http://localhost:4000/customers',
+            (`${this.appConfigService.apiUrl}/customers`),
             {headers: {'x-access-token': localStorage.token}})
             .pipe(map(response => {
                 return response.map(c => new Customer(c.firstName, c.lastName));
@@ -40,7 +42,7 @@ export class CustomerService {
     Save(customer: Customer) {
         this.httpClient
             .post(
-                'http://localhost:4000/customers',
+                '$(this.appConfigService.apiUrl}/customers',
                 new Customerinfo(customer.FName, customer.LName),
                 {headers: {'x-access-token': localStorage.token}})
             .subscribe(()=> {
