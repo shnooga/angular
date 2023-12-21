@@ -38,7 +38,7 @@ import {AppErrorsHandler} from "./services/app-error-handler.service";
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
     {provide: APP_INITIALIZER, useFactory: initializeConfig, multi: true, deps:[AppConfigService]},
-    {provide:ErrorHandler, useClass:AppErrorsHandler},
+    {provide: ErrorHandler, useClass: AppErrorsHandler},
 // {provide: MultiRndService, useClass: MultiRndService},
     // {provide: MultiRndService, useClass: MultiRndService2},
     // {provide: MultiRndService, useClass: MultiRndService, multi: true},

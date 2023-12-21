@@ -9,9 +9,9 @@
         <div class="form-group">
             <label for="LName">Last Name:</label>
             <input class="form-control" [ngClass]="{'is-valid':L.valid, 'is-invalid':L.invalid}" name="LName" type="text" [(ngModel)]="this.LastName" required minlength="3" #L="ngModel">
-            <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.required)"> Enter FName wanker!!</div>
+            <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.required)"> Enter LName wanker!!</div>
             <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.minlength)"> Min 3 chars wanker!!</div>
-<!--            <div class="alert alert-danger" [hidden]="FailsRequired('LName')"> Enter LName wanker!!</div>-->
+<!--            <div class="alert alert-danger" [hidden]="FailsRequired('LName')"> Enter LName dood!!</div>-->
 <!--            <div class="alert alert-danger" [hidden]="FailsMinChar('LName')"> Min 3 chars wanker!!</div>-->
         </div>
         <input type="submit" class="btn btn-success" value="Save" (click)="Save()" [disabled]="myForm.invalid">

@@ -29,7 +29,7 @@ export class CustomerAddComponent implements AfterViewInit {
     }
 
     constructor() {
-        this.FirstNameControl.nativeElement.focus();
+        // this.FirstNameControl.nativeElement.focus();
     }
 
     ngAfterViewInit(): void {
@@ -37,7 +37,7 @@ export class CustomerAddComponent implements AfterViewInit {
     }
 
     // FailsRequired(inputName: string): boolean {
-    //     let f = this.inputForm.get(inputName);
+    //     let f = this.FirstNameControl.nativeElement;
     //     console.log(inputName + " failsMinChar: " + !(f?.dirty && f.errors?.['minlength']));
     //     return !(f?.dirty && f.errors?.['required']);
     // }

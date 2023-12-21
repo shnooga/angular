@@ -12,7 +12,7 @@ export class TokenInterceptorService implements HttpInterceptor {
         const token = localStorage.token;
         let newHeaders = req.headers;
         if (token) {
-            // if token is not undefined
+            // if token exists
             newHeaders = newHeaders.append('x-access-token', token);
         }
 

@@ -18,10 +18,8 @@ export class CustomerService {
     }
 
     private LoadCustomers() {
-        this.httpClient.get<Array<Customerinfo>>(
-            // 'http://localhost:4000/customers',
-            (`${this.appConfigService.apiUrl}/customers`),
-            {headers: {'x-access-token': localStorage.token}})
+        this.httpClient
+            .get<Array<Customerinfo>>(`${this.appConfigService.apiUrl}/customers`)
             .pipe(map(response => {
                 return response.map(c => new Customer(c.firstName, c.lastName));
             }))
@@ -41,10 +39,7 @@ export class CustomerService {
 
     Save(customer: Customer) {
         this.httpClient
-            .post(
-                '$(this.appConfigService.apiUrl}/customers',
-                new Customerinfo(customer.FName, customer.LName),
-                {headers: {'x-access-token': localStorage.token}})
+            .post( `${this.appConfigService.apiUrl}/customers`, new Customerinfo(customer.FName, customer.LName) )
             .subscribe(()=> {
                 this.LoadCustomers();
                 this.IsAddNewSubject.next(false);
